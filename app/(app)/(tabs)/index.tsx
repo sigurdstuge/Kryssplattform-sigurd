@@ -1,5 +1,6 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
+import * as postApi from "@/api/postApi";
 import Post from "@/components/Post";
 import PostFormModal from "@/components/PostFormModal";
 import { useAuthSession } from "@/providers/authctx";
@@ -12,6 +13,7 @@ export default function HomeScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [posts, setPosts] = useState<PostData[]>([]);
   const { userNameSession } = useAuthSession();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   async function createPostLocal(newPost: PostData) {
     const updatedPostList = [...posts, newPost];
@@ -26,8 +28,16 @@ export default function HomeScreen() {
     }
   }
 
+  async function getPostsFromApi() {
+    setIsRefreshing(true);
+    const apiPosts = await postApi.getAllPosts();
+    setPosts(apiPosts);
+    setIsRefreshing(false);
+  }
+
   useEffect(() => {
-    getPostsFromLocal();
+    // getPostsFromLocal();¨
+    getPostsFromApi();
   }, []);
 
   return (
@@ -55,7 +65,10 @@ export default function HomeScreen() {
         isVisible={isModalVisible}
         setIsVisible={setIsModalVisible}
         // Det nye innlegget dukker opp her, og vi kan legge det til i lista over innlegg
-        addPost={createPostLocal}
+        addPost={async (post) => {
+          postApi.createPost(post);
+          getPostsFromApi();
+        }}
       />
       <FlatList
         data={posts}
