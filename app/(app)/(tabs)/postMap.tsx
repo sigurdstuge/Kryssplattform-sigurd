@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import MapView, { Marker } from "react-native-maps";
-import { View } from "react-native";
+import MapView, { Marker, Callout } from "react-native-maps";
+import {Image, StyleSheet, Text, View } from "react-native";
+import { PostData } from "@/types/post";
+import { getData } from "@/utils/local-storage";
+import { Router } from "expo-router";
 
 type Post = {
   id: string;
@@ -25,7 +28,12 @@ export default function PostMapPage() {
 
 return (
   <View>
-  <MapView>
+  <MapView initialRegion={{
+    latitude: 59.917104578,
+    longitude: 10.727706144,
+    latitudeDelta: 0.0422,
+    longitudeDelta: 0.0421,
+  }}>
    
   <Marker coordinate={{}}>
 
