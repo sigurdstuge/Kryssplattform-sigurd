@@ -18,7 +18,13 @@ try {
 export  async function getlistWithComments(ids: string[]) {
 	try {
 	
-			
+			// const querResult = await getDocs(collection(db, "comments"));
+			// const targetComment = querResult.docs.filter((doc) => ids.includes(doc.id));
+
+			// const comment = targetComment.map((doc) =>({
+			// 	...doc.data(),
+			// 	id: doc.id
+			// }  as PostComment)); 
 	} catch(e) {
 		console.log("fikk ikke hentet kommentar", e)
 	}
