@@ -3,7 +3,7 @@ import { PostComment } from "@/types/post";
 import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 
 
-export async function createComment(comment: PostComment) {
+export async function createComment(comment: PostComment, postId: string) {
     try {
         const docRef = await addDoc(collection(db, "comments"), comment);
         console.log("Document written with ID: ", docRef.id);

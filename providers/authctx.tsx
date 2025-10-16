@@ -1,7 +1,7 @@
 import { signIn, signOut } from "@/api/authApi";
 import { auth } from "@/firebaseConfig";
 import { useRouter } from "expo-router";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import {
   createContext,
   ReactNode,
@@ -15,6 +15,7 @@ type AuthContextType = {
   signOut: VoidFunction;
   userNameSession?: string | null;
   isLoading: boolean;
+  user: User
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,6 +34,7 @@ export function useAuthSession() {
 export function AuthSessionProvider({ children }: { children: ReactNode }) {
   const [userSession, setUserSession] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [useAuthSession, setUserAuthSession] = useState<User | null>(null);
 
   const router = useRouter();
 
@@ -40,9 +42,11 @@ export function AuthSessionProvider({ children }: { children: ReactNode }) {
     onAuthStateChanged(auth, (user) => {
       setIsLoading(true);
       if (user) {
-        setUserSession(user.email);
+        setUserSession(user.displayName);
+        setUserAuthSession(user);
       } else {
         setUserSession(null);
+        setUserAuthSession(null);
       }
       setIsLoading(false);
     });
